@@ -12,7 +12,9 @@ function RouteComponent() {
       sx={{
         padding: 5,
         maxHeight: "100%",
-        display: "flex"
+        height: "100%",
+        display: "flex",
+        minHeight: "400px"
       }}
     >
       <Outlet />

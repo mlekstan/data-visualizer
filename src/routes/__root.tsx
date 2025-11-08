@@ -13,7 +13,7 @@ export const Route = createRootRoute({
     const body = await getQuestions();
     const encodedData = body.results.map(questionData => decode(questionData));
 
-    return { data: encodedData };
+    return { data: encodedData } as { data: QuestionData[] };
   },
   pendingComponent: () => <Loader open={true} />
 })
