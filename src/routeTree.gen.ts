@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TablesRouteRouteImport } from './routes/tables/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TablesIndexRouteImport } from './routes/tables/index'
 import { Route as ChartsIndexRouteImport } from './routes/charts/index'
 
 const TablesRouteRoute = TablesRouteRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TablesIndexRoute = TablesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TablesRouteRoute,
+} as any)
 const ChartsIndexRoute = ChartsIndexRouteImport.update({
   id: '/charts/',
   path: '/charts/',
@@ -31,31 +37,33 @@ const ChartsIndexRoute = ChartsIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/tables': typeof TablesRouteRoute
+  '/tables': typeof TablesRouteRouteWithChildren
   '/charts': typeof ChartsIndexRoute
+  '/tables/': typeof TablesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/tables': typeof TablesRouteRoute
   '/charts': typeof ChartsIndexRoute
+  '/tables': typeof TablesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/tables': typeof TablesRouteRoute
+  '/tables': typeof TablesRouteRouteWithChildren
   '/charts/': typeof ChartsIndexRoute
+  '/tables/': typeof TablesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tables' | '/charts'
+  fullPaths: '/' | '/tables' | '/charts' | '/tables/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tables' | '/charts'
-  id: '__root__' | '/' | '/tables' | '/charts/'
+  to: '/' | '/charts' | '/tables'
+  id: '__root__' | '/' | '/tables' | '/charts/' | '/tables/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TablesRouteRoute: typeof TablesRouteRoute
+  TablesRouteRoute: typeof TablesRouteRouteWithChildren
   ChartsIndexRoute: typeof ChartsIndexRoute
 }
 
@@ -75,6 +83,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tables/': {
+      id: '/tables/'
+      path: '/'
+      fullPath: '/tables/'
+      preLoaderRoute: typeof TablesIndexRouteImport
+      parentRoute: typeof TablesRouteRoute
+    }
     '/charts/': {
       id: '/charts/'
       path: '/charts'
@@ -85,9 +100,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface TablesRouteRouteChildren {
+  TablesIndexRoute: typeof TablesIndexRoute
+}
+
+const TablesRouteRouteChildren: TablesRouteRouteChildren = {
+  TablesIndexRoute: TablesIndexRoute,
+}
+
+const TablesRouteRouteWithChildren = TablesRouteRoute._addFileChildren(
+  TablesRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TablesRouteRoute: TablesRouteRoute,
+  TablesRouteRoute: TablesRouteRouteWithChildren,
   ChartsIndexRoute: ChartsIndexRoute,
 }
 export const routeTree = rootRouteImport

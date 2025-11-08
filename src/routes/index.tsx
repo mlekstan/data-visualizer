@@ -1,12 +1,12 @@
-import { Paper } from '@mui/material'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
+  beforeLoad: async () => {
+    throw redirect({ to: "/tables" })
+  }
 })
 
 function RouteComponent() {
-  <Paper elevation={3}>
-    
-  </Paper>
+  
 }

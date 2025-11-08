@@ -1,6 +1,8 @@
 import { Box } from "@mui/material";
-import ClippedDrawer from "./NavBar";
 import { Workspace } from "./Workspace";
+import { SafeArea } from "./SafeArea";
+import { Outlet } from "@tanstack/react-router";
+import NavBar from "./NavBar";
 
 export function App() {
 
@@ -8,10 +10,12 @@ export function App() {
     <Box 
       sx={{
         position: "fixed",
+        top: 0,
         width: "100%",
         height: "100%",
         display: "grid",
-        gridTemplateRows: "100px auto",
+        gridTemplateColumns: "100%",
+        gridTemplateRows: "100px 1fr",
         gridTemplateAreas: `
           "navbar"
           "workspace"
@@ -19,8 +23,12 @@ export function App() {
         backgroundColor: "background.default"
       }}
     >
-      <ClippedDrawer />
-      <Workspace />
+      <NavBar />
+      <Workspace>
+        <SafeArea>
+          <Outlet />
+        </SafeArea>
+      </Workspace>
       {/* <SideBar /> */}
     </Box>
   );

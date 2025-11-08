@@ -2,18 +2,16 @@ import { Box } from "@mui/material";
 import type { ReactNode } from "react";
 
 
-export function Workspace({ children }: { children: ReactNode }) {
-
+export function SafeArea({ children }: { children: ReactNode }) {
+  
   return (
     <Box
       sx={{
+        padding: 7,
         height: "100%",
-        gridArea: "workspace",
-        overflow: "auto"
       }}
     >
       { children }
     </Box>
-
   );
 }
