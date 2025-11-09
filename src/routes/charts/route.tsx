@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Loader } from '../-components/Loader';
 
-export const Route = createFileRoute('/tables')({
+export const Route = createFileRoute('/charts')({
   component: RouteComponent,
   pendingComponent: () => <Loader open={true} />
 })

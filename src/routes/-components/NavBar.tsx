@@ -50,6 +50,7 @@ export default function NavBar() {
               navOptions.map((option, idx) => (
                 <Button
                   key={idx}
+                  size="large"
                   onClick={() => navigate({ to: option.to })}
                   variant="text"
                   sx={{
@@ -65,6 +66,7 @@ export default function NavBar() {
             (themeMode === "light") 
             ?
             <IconButton 
+              size="large"
               onClick={() => setThemeMode("dark")}
               sx={{
                 color: "secondary.contrastText"

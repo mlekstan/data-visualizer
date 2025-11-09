@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TablesRouteRouteImport } from './routes/tables/route'
+import { Route as ChartsRouteRouteImport } from './routes/charts/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TablesIndexRouteImport } from './routes/tables/index'
 import { Route as ChartsIndexRouteImport } from './routes/charts/index'
@@ -17,6 +18,11 @@ import { Route as ChartsIndexRouteImport } from './routes/charts/index'
 const TablesRouteRoute = TablesRouteRouteImport.update({
   id: '/tables',
   path: '/tables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChartsRouteRoute = ChartsRouteRouteImport.update({
+  id: '/charts',
+  path: '/charts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -30,15 +36,16 @@ const TablesIndexRoute = TablesIndexRouteImport.update({
   getParentRoute: () => TablesRouteRoute,
 } as any)
 const ChartsIndexRoute = ChartsIndexRouteImport.update({
-  id: '/charts/',
-  path: '/charts/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => ChartsRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/charts': typeof ChartsRouteRouteWithChildren
   '/tables': typeof TablesRouteRouteWithChildren
-  '/charts': typeof ChartsIndexRoute
+  '/charts/': typeof ChartsIndexRoute
   '/tables/': typeof TablesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -49,22 +56,23 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/charts': typeof ChartsRouteRouteWithChildren
   '/tables': typeof TablesRouteRouteWithChildren
   '/charts/': typeof ChartsIndexRoute
   '/tables/': typeof TablesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tables' | '/charts' | '/tables/'
+  fullPaths: '/' | '/charts' | '/tables' | '/charts/' | '/tables/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/charts' | '/tables'
-  id: '__root__' | '/' | '/tables' | '/charts/' | '/tables/'
+  id: '__root__' | '/' | '/charts' | '/tables' | '/charts/' | '/tables/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChartsRouteRoute: typeof ChartsRouteRouteWithChildren
   TablesRouteRoute: typeof TablesRouteRouteWithChildren
-  ChartsIndexRoute: typeof ChartsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -74,6 +82,13 @@ declare module '@tanstack/react-router' {
       path: '/tables'
       fullPath: '/tables'
       preLoaderRoute: typeof TablesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/charts': {
+      id: '/charts'
+      path: '/charts'
+      fullPath: '/charts'
+      preLoaderRoute: typeof ChartsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -92,13 +107,25 @@ declare module '@tanstack/react-router' {
     }
     '/charts/': {
       id: '/charts/'
-      path: '/charts'
-      fullPath: '/charts'
+      path: '/'
+      fullPath: '/charts/'
       preLoaderRoute: typeof ChartsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ChartsRouteRoute
     }
   }
 }
+
+interface ChartsRouteRouteChildren {
+  ChartsIndexRoute: typeof ChartsIndexRoute
+}
+
+const ChartsRouteRouteChildren: ChartsRouteRouteChildren = {
+  ChartsIndexRoute: ChartsIndexRoute,
+}
+
+const ChartsRouteRouteWithChildren = ChartsRouteRoute._addFileChildren(
+  ChartsRouteRouteChildren,
+)
 
 interface TablesRouteRouteChildren {
   TablesIndexRoute: typeof TablesIndexRoute
@@ -114,8 +141,8 @@ const TablesRouteRouteWithChildren = TablesRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChartsRouteRoute: ChartsRouteRouteWithChildren,
   TablesRouteRoute: TablesRouteRouteWithChildren,
-  ChartsIndexRoute: ChartsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
