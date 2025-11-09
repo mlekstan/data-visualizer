@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useLoaderData } from '@tanstack/react-router'
 import { QuestionsTable } from './-components/questions-table/QuestionsTable';
 import { SearchInput } from './-components/SearchInput';
 import { Box } from '@mui/material';
@@ -7,6 +7,11 @@ import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTa
 import { useEffect, useRef, useState } from 'react';
 
 
+type SearchParams = {
+  category: string;
+  difficulty: string;
+}
+
 export const Route = createFileRoute('/tables/')({
   component: RouteComponent,
 });
@@ -14,7 +19,7 @@ export const Route = createFileRoute('/tables/')({
 
 function RouteComponent() {
   const { data } = useLoaderData({ from: "__root__"});
-  const searchParams = Route.useSearch();
+  const searchParams: SearchParams = Route.useSearch();
   const { current: pageSizes } = useRef([10, 25, 50]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,

@@ -12,9 +12,11 @@ type MultipleChoiceProps = {
   options: string[];
   label: string;
   onChange: (val: string[]) => void;
+  error: boolean;
+  helperText: string;
 }
 
-export default function MultipleChoice({ options, label, onChange }: MultipleChoiceProps) {
+export default function MultipleChoice({ options, label, onChange, error, helperText }: MultipleChoiceProps) {
 
   return (
     <Autocomplete
@@ -40,7 +42,13 @@ export default function MultipleChoice({ options, label, onChange }: MultipleCho
       }}
       style={{ width: 200 }}
       renderInput={(params) => (
-        <TextField {...params} label={label} placeholder="Search..." />
+        <TextField 
+          {...params} 
+          label={label} 
+          placeholder="Search..." 
+          error={error}
+          helperText={(helperText) ? helperText : " "}
+        />
       )}
     />
   );

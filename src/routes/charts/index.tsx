@@ -4,12 +4,18 @@ import { useEffect, useMemo, useState } from 'react';
 import MultipleChoice from './-components/MultipleChoice';
 import SingleChoice from './-components/SingleChoice';
 import { CustomBarChart } from './-components/CustomBarChart';
+import { calculateStats } from './-functions/calculateStats';
 
 export type DomainType = {
   name: string;
   id: string;
   allValues: string[];
   selectedValues: string[];
+}
+
+type FieldsErrors = {
+  args: { isError: boolean, message: string }
+  series: { isError: boolean, message: string }
 }
 
 
@@ -20,9 +26,13 @@ export const Route = createFileRoute('/charts/')({
 
 function RouteComponent() {
   const { data } = useLoaderData({ from: "__root__"});
+  const [errors, setErrors] = useState<FieldsErrors>({
+    args: { isError: false, message: ""},
+    series: { isError: false, message: ""},
+  });
 
   const { categories, difficulties } = useMemo(() => {
-    const catDiff = data.reduce((accu, q, idx) => {
+    const catDiff = data.reduce((accu, q) => {
       if (!accu.categories.includes(q.category)) {
         accu.categories.push(q.category);
       }
@@ -60,12 +70,25 @@ function RouteComponent() {
   const [series, setSeries] = useState<DomainType>(domainTypes[1]);
 
   useEffect(() => {
+    setErrors({
+      args: {
+        isError: args.selectedValues.length === 0,
+        message: args.selectedValues.length === 0 ? "Please select arguments" : ""
+      },
+      series: {
+        isError: series.selectedValues.length === 0,
+        message: series.selectedValues.length === 0 ? "Please select series" : ""
+      }
+    });
+  }, [args, series]);
+
+  useEffect(() => {
     if (args.id === "category") {
       setSeries((prev) => (prev.id === "difficulty") ? prev : domainTypes[1]);
     } else {
       setSeries((prev) => (prev.id === "category") ? prev : domainTypes[0]);
     }
-  });
+  }, [args]);
 
 
   const stats = useMemo(() => {
@@ -81,9 +104,7 @@ function RouteComponent() {
     
     return stats;
   }, 
-  [
-    args, series, data
-  ]);
+  [args, series, data]);
 
   console.log(stats)
 
@@ -91,7 +112,8 @@ function RouteComponent() {
   return (
     <Box sx={{display: "grid", gridTemplateRows: "100%", gridTemplateColumns: "auto 1fr", width: "100%", height: "100%"}}>
       <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-      <SingleChoice 
+      <SingleChoice
+
         options={domainTypes} 
         label={"Domain types"}
         value={args}
@@ -99,7 +121,9 @@ function RouteComponent() {
           setArgs((prev) => (!val) ? prev : val)
         }} 
       />
-      <MultipleChoice 
+      <MultipleChoice
+        error={errors.args.isError}
+        helperText={errors.args.message}
         options={args.allValues} 
         label="Arguments" 
         onChange={(val) => setArgs((prev) => {
@@ -108,7 +132,9 @@ function RouteComponent() {
           return _prev;
         })} 
       />
-      <MultipleChoice 
+      <MultipleChoice
+        error={errors.series.isError}
+        helperText={errors.series.message}
         options={series.allValues} 
         label="Series"
         onChange={(val) => setSeries((prev) => {
@@ -122,29 +148,4 @@ function RouteComponent() {
       <CustomBarChart data={stats} argsId={args.id} series={series.selectedValues} seriesId={series.id} />
     </Box>
   );
-}
-
-
-function calculateStats(
-  { args, series, argsKey, seriesKey, data }:
-  { args: string[], series: string[], argsKey: string, seriesKey: string, data: Record<string, any>[] }
-) {
-  const stats = data.reduce((prev, item) => {
-    const argValue = item[argsKey];
-    const seriesValue = item[seriesKey];
-
-    if (!args.includes(argValue)) return prev;
-    if (!series.includes(seriesValue)) return prev;
-
-    if (!prev[argValue]) {
-      prev[argValue] = { [argsKey]: argValue };
-    }
-
-    prev[argValue][seriesValue] = (prev[argValue][seriesValue] ?? 0) + 1;
-    prev[argValue]["all"] = (prev[argValue]["all"] ?? 0) + 1; 
-
-    return prev;
-  }, {} as Record<string, Record<string, any>>);
-
-  return Object.values(stats);
 }

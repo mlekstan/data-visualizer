@@ -1,9 +1,7 @@
 import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import pathAppLogoLight from "./../../assets/data-visualizer-logo-light.png";
-import { Box, Button, IconButton, List } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import type { ExtendedLinkOptions } from '../../types';
 import { useNavigate } from '@tanstack/react-router';
 import LightModeIcon from '@mui/icons-material/LightModeSharp';
