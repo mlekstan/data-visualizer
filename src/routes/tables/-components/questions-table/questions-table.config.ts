@@ -15,12 +15,14 @@ export const columns = [
     header: "Category",
     cell: info => info.getValue(),
     footer: info => info.column.columnDef.id,
+    filterFn: "equalsString",
   }),
   columnHelper.accessor(row => row.difficulty, {
     id: "difficulty",
     header: "Difficulty",
     cell: info => info.getValue(),
     footer: info => info.column.columnDef.id,
+    filterFn: "equalsString",
   }),
   columnHelper.accessor(row => row.type, {
     id: "type",

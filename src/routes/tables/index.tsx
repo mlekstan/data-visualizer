@@ -4,7 +4,7 @@ import { SearchInput } from './-components/SearchInput';
 import { Box } from '@mui/material';
 import { columns } from './-components/questions-table/questions-table.config';
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 
 export const Route = createFileRoute('/tables/')({
@@ -33,6 +33,13 @@ function RouteComponent() {
       pagination,
     }
   });
+
+  useEffect(() => {
+    if (searchParams) {
+      table.getColumn("category")?.setFilterValue(searchParams.category)
+      table.getColumn("difficulty")?.setFilterValue(searchParams.difficulty)
+    }
+  }, [searchParams])
 
 
   return (

@@ -18,7 +18,7 @@ export const Route = createRootRoute({
     return { data: encodedData } as { data: QuestionData[] };
   },
   pendingComponent: () => <Loader open={true} />,
-  staleTime: 30000
+  staleTime: Infinity
 })
 
 function RootComponent() {
