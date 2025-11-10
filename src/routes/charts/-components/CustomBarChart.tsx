@@ -85,6 +85,7 @@ export function CustomBarChart({ data, argsId, series, seriesId }: CustomBarChar
         <Tooltip
           defaultIndex={1}
           cursor={false}
+          labelStyle={{ color: "black"}}
         />
       </BarChart>
     </ResponsiveContainer>

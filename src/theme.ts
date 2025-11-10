@@ -5,6 +5,7 @@ const lightThemeOptions: ThemeOptions = {
     mode: 'light',
     primary: {
       main: '#120112',
+      dark: "#984598"
     },
     secondary: {
       main: '#f50000',
@@ -18,6 +19,7 @@ const darkThemeOptions: ThemeOptions = {
     mode: 'dark',
     primary: {
       main: '#da63da',
+      dark: "#984598"
     },
     secondary: {
       main: '#c200f5',
