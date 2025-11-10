@@ -1,1 +1,0 @@
-import{j as t,P as e,O as i}from"./index-DpKBmqbs.js";function o(){return t.jsx(e,{elevation:10,sx:{padding:5,maxHeight:"100%",height:"100%",display:"flex",minHeight:"400px",minWidth:"700px"},children:t.jsx(i,{})})}export{o as component};
