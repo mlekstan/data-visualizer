@@ -22,24 +22,28 @@ export default function MultipleChoice({ options, label, onChange, error, helper
   const allOptions = ["All", ...options];
 
   const handleChange = (val: string[]) => {
-    let newVal: string[];
+    let newSelected: string[] = selectedOptions;
+    let newVal: string[] = [];
+
     if (!selectedOptions.includes("All")) {
       if (val.includes("All")) {
-        setSelectedOptions(allOptions);
-        newVal = options
+        newSelected = allOptions;
+        newVal = options;
       } else {
-        setSelectedOptions((val.length === options.length) ? allOptions : val);
-        newVal = ((val.length === options.length) ? options : val)
+        const allOtherSelected = val.length === options.length;
+        newSelected = allOtherSelected ? allOptions : val;
+        newVal = allOtherSelected ? options : val;
       }
     } else {
       if (val.includes("All")) {
         newVal = val.filter((v) => v !== "All");
-        setSelectedOptions(newVal);
       } else {
-        newVal = []
-        setSelectedOptions(newVal);
+        newVal = [];
       }
+      newSelected = newVal;
     }
+
+    setSelectedOptions(newSelected);
     onChange(newVal);
   }
 
