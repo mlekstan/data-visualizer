@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useState } from 'react';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -17,16 +18,41 @@ type MultipleChoiceProps = {
 }
 
 export default function MultipleChoice({ options, label, onChange, error, helperText }: MultipleChoiceProps) {
+  const [selectedOptions, setSelectedOptions] = useState(Array<string>())
+  const allOptions = ["All", ...options];
+
+  const handleChange = (val: string[]) => {
+    let newVal: string[];
+    if (!selectedOptions.includes("All")) {
+      if (val.includes("All")) {
+        setSelectedOptions(allOptions);
+        newVal = options
+      } else {
+        setSelectedOptions((val.length === options.length) ? allOptions : val);
+        newVal = ((val.length === options.length) ? options : val)
+      }
+    } else {
+      if (val.includes("All")) {
+        newVal = val.filter((v) => v !== "All");
+        setSelectedOptions(newVal);
+      } else {
+        newVal = []
+        setSelectedOptions(newVal);
+      }
+    }
+    onChange(newVal);
+  }
 
   return (
     <Autocomplete
       multiple
-      onChange={(_, val) => onChange(val)}
-      options={options}
+      value={selectedOptions}
+      onChange={(_, val) => handleChange(val)}
+      options={allOptions}
       renderValue={() => null}
       disableCloseOnSelect
       getOptionLabel={(option) => option}
-      renderOption={(props, option, { selected }) => {
+      renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
           <li key={key} {...optionProps}>
@@ -34,7 +60,7 @@ export default function MultipleChoice({ options, label, onChange, error, helper
               icon={icon}
               checkedIcon={checkedIcon}
               style={{ marginRight: 8 }}
-              checked={selected}
+              checked={selectedOptions.includes(option)}
             />
             {option}
           </li>

@@ -112,37 +112,36 @@ function RouteComponent() {
   return (
     <Box sx={{display: "grid", gridTemplateRows: "100%", gridTemplateColumns: "auto 1fr", width: "100%", height: "100%"}}>
       <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-      <SingleChoice
-
-        options={domainTypes} 
-        label={"Domain types"}
-        value={args}
-        onChange={(val) => {
-          setArgs((prev) => (!val) ? prev : val)
-        }} 
-      />
-      <MultipleChoice
-        error={errors.args.isError}
-        helperText={errors.args.message}
-        options={args.allValues} 
-        label="Arguments" 
-        onChange={(val) => setArgs((prev) => {
-          const _prev = {...prev};
-          _prev.selectedValues = val;
-          return _prev;
-        })} 
-      />
-      <MultipleChoice
-        error={errors.series.isError}
-        helperText={errors.series.message}
-        options={series.allValues} 
-        label="Series"
-        onChange={(val) => setSeries((prev) => {
-          const _prev = {...prev};
-          _prev.selectedValues = val;
-          return _prev;
-        })} 
-      />
+        <SingleChoice
+          options={domainTypes} 
+          label={"Domain types"}
+          value={args}
+          onChange={(val) => {
+            setArgs((prev) => (!val) ? prev : val)
+          }} 
+        />
+        <MultipleChoice
+          error={errors.args.isError}
+          helperText={errors.args.message}
+          options={args.allValues} 
+          label="Arguments" 
+          onChange={(val) => setArgs((prev) => {
+            const _prev = {...prev};
+            _prev.selectedValues = val;
+            return _prev;
+          })} 
+        />
+        <MultipleChoice
+          error={errors.series.isError}
+          helperText={errors.series.message}
+          options={series.allValues} 
+          label="Series"
+          onChange={(val) => setSeries((prev) => {
+            const _prev = {...prev};
+            _prev.selectedValues = val;
+            return _prev;
+          })} 
+        />
       </Box>
 
       <CustomBarChart data={stats} argsId={args.id} series={series.selectedValues} seriesId={series.id} />
