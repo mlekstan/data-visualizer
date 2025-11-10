@@ -1,0 +1,1 @@
+import{j as e,P as t,O as n}from"./index-sH3wKb1z.js";function o(){return e.jsx(t,{elevation:10,sx:{padding:5,maxHeight:"100%",height:"100%",display:"flex",minHeight:"400px"},children:e.jsx(n,{})})}export{o as component};
