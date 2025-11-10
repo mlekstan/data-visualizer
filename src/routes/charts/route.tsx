@@ -16,7 +16,8 @@ function RouteComponent() {
         maxHeight: "100%",
         height: "100%",
         display: "flex",
-        minHeight: "400px"
+        minHeight: "400px",
+        minWidth: "700px"
       }}
     >
       <Outlet />
