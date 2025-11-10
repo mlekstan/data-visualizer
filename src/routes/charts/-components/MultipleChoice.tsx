@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -20,6 +20,10 @@ type MultipleChoiceProps = {
 export default function MultipleChoice({ options, label, onChange, error, helperText }: MultipleChoiceProps) {
   const [selectedOptions, setSelectedOptions] = useState(Array<string>())
   const allOptions = ["All", ...options];
+
+  useEffect(() => {
+    setSelectedOptions([]);
+  }, [options]);
 
   const handleChange = (val: string[]) => {
     let newSelected: string[] = selectedOptions;
