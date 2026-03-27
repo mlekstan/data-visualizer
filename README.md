@@ -21,7 +21,7 @@ Data Visualizer is mini data visualization tool using data from the Open Trivia 
 4. **Light and dark mode support**
 
 ## **Tech stack**
-   - TypeStript
+   - TypeScript
    - React.js
    - Recharts
    - Tanstack Router
